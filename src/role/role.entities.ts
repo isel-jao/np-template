@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiProperty } from '@nestjs/swagger';
-import { MinLength } from 'class-validator';
+import { IsDateString, IsBoolean, IsEmail, IsInt, MinLength } from 'class-validator'
+import { IsPassword, IsPhoneNumber } from 'src/utils';
 
-export class Sample {
+export class Role {
   @ApiProperty({ required: false })
   id: number;
   @ApiProperty({ required: false })
@@ -13,14 +14,14 @@ export class Sample {
   updatedAt: Date;
 }
 
-export class CreateSampleDto {
+export class CreateRoleDto {
   @ApiProperty({ required: true })
   @MinLength(2)
   name: string;
 }
 
-export class UpdateSampleDto {
-  @ApiProperty({ required: true })
+export class UpdateRoleDto {
+  @ApiProperty({ required: false })
   @MinLength(2)
   name: string;
 }
