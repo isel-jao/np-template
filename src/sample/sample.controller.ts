@@ -1,0 +1,51 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
+import { SampleService } from './sample.service';
+import { Sample, CreateSampleDto, UpdateSampleDto } from './sample.entities';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { FindAllQuery } from 'src/utils';
+
+@ApiTags('sample')
+@Controller('sample')
+export class SampleController {
+  constructor(private readonly sampleService: SampleService) {}
+
+  @ApiOkResponse({ type: [Sample] })
+  @Get()
+  findAll(@Query() query: FindAllQuery) {
+    return this.sampleService.findAll(query);
+  }
+
+  @ApiOkResponse({ type: Sample })
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.sampleService.findOne(+id);
+  }
+
+  @ApiCreatedResponse({ type: Sample })
+  @Post()
+  create(@Body() data: CreateSampleDto) {
+    return this.sampleService.create(data);
+  }
+
+  @ApiOkResponse({ type: Sample })
+  @Patch(':id')
+  update(@Param('id', ParseIntPipe) id: number, @Body() data: UpdateSampleDto) {
+    return this.sampleService.update(id, data);
+  }
+
+  @ApiOkResponse({ type: Sample })
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.sampleService.remove(id);
+  }
+}
