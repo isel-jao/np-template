@@ -96,7 +96,7 @@ export function HandleRequestErrors() {
         }
         const result = await originalMethod.apply(this, args);
         if (!result) throw new NotFoundException();
-        removeUnwantedColumns(result);
+        // removeUnwantedColumns(result);
         return result;
       } catch (e) {
         console.log(`handleRequestError: ${e}`);
