@@ -4,4 +4,5 @@ test -f .env || cp .env_example .env && \
 docker-compose up -d && \
 npx prisma migrate dev --name initial && \
 npx prisma generate && \
+npx prisma db seed && \
 npm run start:dev
