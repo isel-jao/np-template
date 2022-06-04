@@ -12,12 +12,12 @@ import {
 import { UserService } from './user.service';
 import { User, CreateUserDto, UpdateUserDto } from './user.entities';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { FindAllQuery } from 'src/utils';
+import { FindAllQuery, FindOneQuery } from 'src/utils';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @ApiOkResponse({ type: [User] })
   @Get()
@@ -27,8 +27,8 @@ export class UserController {
 
   @ApiOkResponse({ type: User })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(+id);
+  findOne(@Query() query: FindOneQuery, @Param('id', ParseIntPipe) id: number) {
+    return this.userService.findOne(+id, query);
   }
 
   @ApiCreatedResponse({ type: User })

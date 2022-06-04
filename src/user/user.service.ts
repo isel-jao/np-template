@@ -1,19 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { FindAllOptions, HandleRequestErrors } from 'src/utils';
+import { FindAllOptions, FindOneQuery, HandleRequestErrors } from 'src/utils';
 import { CreateUserDto, UpdateUserDto } from './user.entities';
 
-const include = {
-  role: {
-    select: {
-      name: true,
-    },
-  }
-}
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   @FindAllOptions({})
   @HandleRequestErrors()
@@ -21,13 +14,13 @@ export class UserService {
     const totalResult = await this.prisma.user.count({
       where: options.where,
     });
-    const results = await this.prisma.user.findMany({...options, include});
+    const results = await this.prisma.user.findMany({ ...options });
     return { totalResult, results };
-}
+  }
 
   @HandleRequestErrors()
-  async findOne(id: number) {
-    return await this.prisma.user.findUnique({ where: { id }, include });
+  async findOne(id: number, query?: any) {
+    return await this.prisma.user.findUnique({ where: { id }, ...query });
   }
 
   @HandleRequestErrors()

@@ -4,8 +4,13 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+export class FindOneQuery {
+  @ApiPropertyOptional({ type: 'string', description: `'field1, filde2.subfild' or '{"field1: "true" , "filde2" : {"subfild": "true" }}'(JSON string format)` })
+  include?: string;
+
+}
 export class FindAllQuery {
   @ApiPropertyOptional()
   skip?: number;
@@ -15,15 +20,37 @@ export class FindAllQuery {
   search?: string;
   @ApiPropertyOptional()
   orderBy?: string;
+  @ApiPropertyOptional()
+  include?: string;
   where?: string;
 }
+
+const convertToObject = (str) => {
+  if (!str) return {};
+  const arr = str.split(".");
+  if (arr.length === 1) return { [arr[0]]: true };
+  return { [arr[0]]: convertToObject(arr.slice(1).join(".")) };
+};
+
+const getIncludeFromString = (str) => {
+  let include = {};
+  try {
+    include = JSON.parse(str);
+  } catch (e) {
+    include = str.split(",").reduce((acc, curr) => {
+      const obj = convertToObject(curr.trim());
+      return { ...acc, ...obj };
+    }, {});
+  }
+  return include;
+};
 
 export function FindAllOptions({ searchFields }: { searchFields?: string[] }) {
   return function (target: any, key: string, descriptor: PropertyDescriptor) {
     if (key == 'findAll') {
       const orignalMethod = descriptor.value;
       descriptor.value = function (params: any) {
-        const { skip, take, search, where, orderBy, ...unhandeld } = params;
+        const { skip, take, search, where, orderBy, include, ...unhandeld } = params;
         if (Object.keys(unhandeld).length > 0)
           throw new BadRequestException(
             'Unhandled parameters: ' + Object.keys(unhandeld).join(', '),
@@ -52,6 +79,9 @@ export function FindAllOptions({ searchFields }: { searchFields?: string[] }) {
           }));
         }
         delete params.search;
+        if (include) {
+          params.include = getIncludeFromString(include);
+        }
         return orignalMethod.apply(this, [params]);
       };
       return descriptor;
@@ -94,6 +124,9 @@ export function HandleRequestErrors() {
               'id, deletedAt, updatedAt, createdAt are not allowed in POST or PATCH requests',
             );
         }
+        if (args.length > 1 && args[1] && args[1].include)
+          args[1].include = getIncludeFromString(args[1].include);
+
         const result = await originalMethod.apply(this, args);
         if (!result) throw new NotFoundException();
         // removeUnwantedColumns(result);
