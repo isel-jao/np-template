@@ -5,7 +5,7 @@ import { CreateSampleDto, UpdateSampleDto } from './sample.entities';
 
 @Injectable()
 export class SampleService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   @FindAllOptions({})
   @HandleRequestErrors()
@@ -18,8 +18,8 @@ export class SampleService {
   }
 
   @HandleRequestErrors()
-  async findOne(id: number) {
-    return await this.prisma.sample.findUnique({ where: { id } });
+  async findOne(id: number, query?: any) {
+    return await this.prisma.sample.findUnique({ where: { id }, ...query });
   }
 
   @HandleRequestErrors()

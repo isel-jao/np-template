@@ -5,7 +5,7 @@ import { CreateRoleDto, UpdateRoleDto } from './role.entities';
 
 @Injectable()
 export class RoleService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   @FindAllOptions({})
   @HandleRequestErrors()
@@ -18,8 +18,8 @@ export class RoleService {
   }
 
   @HandleRequestErrors()
-  async findOne(id: number) {
-    return await this.prisma.role.findUnique({ where: { id } });
+  async findOne(id: number, query?: any) {
+    return await this.prisma.role.findUnique({ where: { id }, ...query });
   }
 
   @HandleRequestErrors()

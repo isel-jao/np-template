@@ -12,12 +12,12 @@ import {
 import { RoleService } from './role.service';
 import { Role, CreateRoleDto, UpdateRoleDto } from './role.entities';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { FindAllQuery } from 'src/utils';
+import { FindAllQuery, FindOneQuery } from 'src/utils';
 
 @ApiTags('role')
 @Controller('role')
 export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(private readonly roleService: RoleService) { }
 
   @ApiOkResponse({ type: [Role] })
   @Get()
@@ -27,8 +27,8 @@ export class RoleController {
 
   @ApiOkResponse({ type: Role })
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.roleService.findOne(+id);
+  findOne(@Query() query: FindOneQuery, @Param('id', ParseIntPipe) id: number) {
+    return this.roleService.findOne(+id, query);
   }
 
   @ApiCreatedResponse({ type: Role })

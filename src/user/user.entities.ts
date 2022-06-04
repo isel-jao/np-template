@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsBoolean, IsEmail, IsInt, MinLength, IsOptional } from 'class-validator'
+import { IsDateString, IsBoolean, IsEmail, IsInt, MinLength } from 'class-validator'
 import { IsPassword, IsPhoneNumber } from 'src/utils';
 
 export class User {
@@ -42,73 +42,56 @@ export class CreateUserDto {
   lastName: string;
   @ApiProperty({ required: true })
   @MinLength(2)
-  @IsOptional()
   middleName: string;
   @ApiProperty({ required: true })
   @IsEmail()
-  @IsOptional()
   email: string;
   @ApiProperty({ required: true })
   @IsBoolean()
-  @IsOptional()
   isVerified: boolean;
   @ApiProperty({ required: true })
   @IsPassword()
-  @IsOptional()
   password: string;
   @ApiProperty({ required: true })
   @IsDateString()
-  @IsOptional()
   expiryDate: Date;
   @ApiProperty({ required: true })
   @MinLength(2)
-  @IsOptional()
   phoneNumber: string;
   @ApiProperty({ required: true })
   @IsDateString()
-  @IsOptional()
   birthDate: Date;
 }
 
 export class UpdateUserDto {
   @ApiProperty({ required: false })
   @IsInt()
-  @IsOptional()
   roleId: number;
   @ApiProperty({ required: false })
   @MinLength(2)
-  @IsOptional()
   firstName: string;
   @ApiProperty({ required: false })
   @MinLength(2)
-  @IsOptional()
   lastName: string;
   @ApiProperty({ required: false })
   @MinLength(2)
-  @IsOptional()
   middleName: string;
   @ApiProperty({ required: false })
   @IsEmail()
-  @IsOptional()
   email: string;
   @ApiProperty({ required: false })
   @IsBoolean()
-  @IsOptional()
   isVerified: boolean;
   @ApiProperty({ required: false })
   @IsPassword()
-  @IsOptional()
   password: string;
   @ApiProperty({ required: false })
   @IsDateString()
-  @IsOptional()
   expiryDate: Date;
   @ApiProperty({ required: false })
   @MinLength(2)
-  @IsOptional()
   phoneNumber: string;
   @ApiProperty({ required: false })
   @IsDateString()
-  @IsOptional()
   birthDate: Date;
 }

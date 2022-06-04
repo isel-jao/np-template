@@ -7,12 +7,12 @@ import { PrismaService } from './prisma.service';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
-  imports: [UserModule,  RoleModule, ],
+  imports: [UserModule, RoleModule, ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
 
-export class AppModule  implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)

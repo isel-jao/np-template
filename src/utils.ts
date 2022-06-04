@@ -26,10 +26,10 @@ export class FindAllQuery {
 }
 
 const convertToObject = (str) => {
-  if (!str) return {};
+  if (!str) return true;
   const arr = str.split(".");
   if (arr.length === 1) return { [arr[0]]: true };
-  return { [arr[0]]: convertToObject(arr.slice(1).join(".")) };
+  return { [arr[0]]: { include: convertToObject(arr.slice(1).join(".")) } };
 };
 
 const getIncludeFromString = (str) => {

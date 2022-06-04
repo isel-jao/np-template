@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { FindAllOptions, FindOneQuery, HandleRequestErrors } from 'src/utils';
+import { FindAllOptions, HandleRequestErrors } from 'src/utils';
 import { CreateUserDto, UpdateUserDto } from './user.entities';
-
 
 @Injectable()
 export class UserService {
@@ -14,7 +13,7 @@ export class UserService {
     const totalResult = await this.prisma.user.count({
       where: options.where,
     });
-    const results = await this.prisma.user.findMany({ ...options });
+    const results = await this.prisma.user.findMany(options);
     return { totalResult, results };
   }
 
