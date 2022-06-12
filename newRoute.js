@@ -19,7 +19,7 @@ const file = readFileSync(
 
 function newRoute(entity, update = false) {
   ////////////////////////////// get Dto class //////////////////////////////
-
+  console.log("entity", entity, "update", update);
   const knownTypes = [
     "string",
     "number",
@@ -48,7 +48,7 @@ function newRoute(entity, update = false) {
 
   ///////////////////////// create the route folder /////////////////////////
   try {
-    if (update) rmdirSync(`./src/${entity}`, { recursive: true });
+    if (update) rmSync(`./src/${entity}`, { recursive: true });
     mkdirSync(`./src/${entity}`);
   } catch (e) {
     console.log(`${entity} route already exists`);
@@ -67,13 +67,13 @@ function newRoute(entity, update = false) {
     .replace(/Sample/g, capitilize(entity));
   writeFileSync(`./src/${entity}/${entity}.service.ts`, entityService);
 
+  // create the route module
+  const entityModule = readFileSync("./sample/module", "utf8")
+    .replace(/sample/g, entity)
+    .replace(/Sample/g, capitilize(entity));
+  writeFileSync(`./src/${entity}/${entity}.module.ts`, entityModule);
+  /////////////////////////// update the app module ///////////////////////////
   if (!update) {
-    // create the route module
-    const entityModule = readFileSync("./sample/module", "utf8")
-      .replace(/sample/g, entity)
-      .replace(/Sample/g, capitilize(entity));
-    writeFileSync(`./src/${entity}/${entity}.module.ts`, entityModule);
-    /////////////////////////// update the app module ///////////////////////////
     const appModule = readFileSync("./src/app.module.ts", "utf8").replace(
       /(?<=(imports *: *))\[/,
       `\[${capitilize(entity)}Module, `
@@ -101,6 +101,7 @@ function newRoute(entity, update = false) {
     else if (x[1] === "number") appendFileSync(entityFile, `  @IsInt()\n`);
     else if (x[1] === "boolean") appendFileSync(entityFile, `  @IsBoolean()\n`);
     else if (x[1] === "string") appendFileSync(entityFile, `  @MinLength(2)\n`);
+    if (x[2] == "null") appendFileSync(entityFile, `  @IsOptional()\n`);
   };
   entity = capitilize(entity);
   writeFileSync(
@@ -123,7 +124,10 @@ function newRoute(entity, update = false) {
   // create the entity dto class
   appendFileSync(entityFile, `export class ${entity} {\n`);
   entityDto.forEach((x) => {
-    appendFileSync(entityFile, `  @ApiProperty({ required: false })\n`);
+    appendFileSync(
+      entityFile,
+      `  @ApiProperty({ required: ${x[2] != "null"} })\n`
+    );
     appendFileSync(entityFile, `  ${x[0]}: ${x[1]};\n`);
   });
   appendFileSync(entityFile, "}\n\n");
@@ -175,8 +179,11 @@ if (process.argv[2] == "all") {
   console.log(models);
 
   models.forEach((model) => {
-    newRoute(model);
+    newRoute(model, process.argv[3] == "--update" || process.argv[3] == "-u");
   });
 } else {
-  newRoute(process.argv[2]);
+  newRoute(
+    process.argv[2],
+    process.argv[3] == "--update" || process.argv[3] == "-u"
+  );
 }
