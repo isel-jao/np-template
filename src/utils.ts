@@ -228,17 +228,3 @@ export function IsPassword(limit?: number) {
   };
 }
 
-export function CheckToken() {
-  return function (target: any, key: string, ds: PropertyDescriptor) {
-    const originalMethod = ds.value;
-
-    ds.value = async function (...args: any[]) {
-      const token = args[0].split(' ')[1];
-      const is_valide = await this.cacheManager.get(token);
-      if (is_valide == null) throw new UnauthorizedException();
-      const result = await originalMethod.apply(this, args);
-      return result;
-    };
-    return ds;
-  };
-}

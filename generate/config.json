@@ -1,0 +1,17 @@
+{
+	"schema": "../prisma/schema.prisma",
+	"types": {
+		"Int": {
+			"type": "number",
+			"validations": ["@IsInt()"]
+		},
+		"String": {
+			"type": "string",
+			"validations": ["@IsString()"]
+		},
+		"DateTime": {
+			"type": "Date",
+			"validations": ["@IsDateString()"]
+		}
+	}
+}
