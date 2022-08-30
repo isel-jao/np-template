@@ -1,35 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsBoolean, IsEmail, IsInt, MinLength, IsString, IsOptional } from 'class-validator'
+import { IsInt, IsString, MinLength, MaxLength, IsDateString, IsOptional } from 'class-validator'
 import { IsPassword, IsPhoneNumber } from 'src/utils';
 
 export class User {
   @ApiProperty({ required: false })
-  @IsInt()
   id: number;
   @ApiProperty({ required: false })
-  @IsInt()
   roleId: number;
   @ApiProperty({ required: false })
-  @IsString()
   email: string;
   @ApiProperty({ required: false })
-  @IsString()
   firstName: string;
   @ApiProperty({ required: false })
-  @IsString()
   lastName: string;
   @ApiProperty({ required: false })
-  @IsString()
   middleName: string;
   @ApiProperty({ required: false })
-  @IsString()
   avatar: string;
   @ApiProperty({ required: false })
-  @IsDateString()
   createdAt: Date;
   @ApiProperty({ required: false })
-  @IsDateString()
   updatedAt: Date;
 }
 
@@ -40,19 +31,29 @@ export class CreateUserDto {
   roleId: number;
   @ApiProperty({ required: true })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   email: string;
   @ApiProperty({ required: true })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   firstName: string;
   @ApiProperty({ required: true })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   lastName: string;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   middleName: string;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   avatar: string;
 }
@@ -64,22 +65,32 @@ export class UpdateUserDto {
   roleId: number;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   email: string;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   firstName: string;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   lastName: string;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   middleName: string;
   @ApiProperty({ required: false })
   @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   @IsOptional()
   avatar: string;
 }

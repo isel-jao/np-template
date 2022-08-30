@@ -3,15 +3,15 @@
 	"types": {
 		"Int": {
 			"type": "number",
-			"validations": ["@IsInt()"]
+			"validations": ["IsInt()"]
 		},
 		"String": {
 			"type": "string",
-			"validations": ["@IsString()"]
+			"validations": ["IsString()", "MinLength(2)", "MaxLength(255)"]
 		},
 		"DateTime": {
 			"type": "Date",
-			"validations": ["@IsDateString()"]
+			"validations": ["IsDateString()"]
 		}
 	}
 }
