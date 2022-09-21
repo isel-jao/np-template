@@ -34,29 +34,18 @@ datasource db {
 //   @@map("categories")
 // }
 
-model Role {
-  id    Int    @id @default(autoincrement()) @map("id")
-  name  String @unique @map("name") @db.VarChar(100)
-  users User[]
+model testTest {
+  id   Int    @id @default(autoincrement()) @map("id")
+  name String @unique @map("name") @db.VarChar(100)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
-
-  @@map("roles")
-}
-
-model User {
-  id         Int     @id @default(autoincrement()) @map("id")
-  roleId     Int?    @map("role_id")
-  role       Role?   @relation(fields: [roleId], references: [id])
-  email      String  @unique @map("email") @db.VarChar(100)
-  firstName  String  @map("first_name") @db.VarChar(100)
-  lastName   String  @map("last_name") @db.VarChar(100)
-  middleName String? @map("middle_name") @db.VarChar(100)
-  avatar     String? @map("avatar") @db.VarChar(255)
+  firstName String? @map("first_name") @db.VarChar(100)
+  lastName  String? @map("last_name") @db.VarChar(100)
+  email     String? @map("email") @db.VarChar(100)
+  password  String? @map("password") @db.VarChar(100)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
   @@map("users")
 }
+
