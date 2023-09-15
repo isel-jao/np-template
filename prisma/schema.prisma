@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Lookahead X(?=Y) x followed by y
+// Lookbehind (?<=Y)X x preceded by y
+// Negative lookahead X(?!Y) x not followed by y
+// Negative lookbehind (?<!Y)X x not preceded by y
+// /(?<=\s*enum\s+)\w+(?=\s*\{)/
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum Gender {
+  FEMALE
+  MALE
+}
+
+// 
+model User {
+  id         Int     @id @default(autoincrement())
+  email      String  @unique // IsEmail()
+  password   String // IsPassword()
+  firstName  String  @map("first_name")
+  middleName String? @map("middle_name")
+  age        Int?    @default(18)
+  gender     Gender
+  avatarUrl  String? // file
+
+  lastName   String @map("last_name") // test test test
+  role       Role   @default(USER)
+  attributes Json   @default("{}")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  posts     Post[]
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   Int
+}
+
+model Group {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users User[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String   @unique
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int      @map("author_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model TestTest {
+  testId    String   @id @default(uuid())
+  name      String   @unique // IsEmail()
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}

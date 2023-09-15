@@ -1,0 +1,31 @@
+GET http://localhost:3000
+
+### 
+GET http://localhost:3001/user/1
+
+### create a new user
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+  "firstName": "test1",
+  "lastName": "test",
+  "email": "tesdt1@test.com",
+  "password": "Aa*123456",
+  "gender": "FEMALE",
+  "groupId": 1,
+  "posts": "[
+    {
+      \"title\": \"test post\",
+      \"content\": \"test content\"
+    }
+  ]"
+}
+
+###
+POST http://localhost:3000/group
+Content-Type: application/json
+
+{
+ "name": "test group"
+}
